@@ -1,0 +1,9 @@
+@'
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfvars.json
+crash.log
+'@ | Set-Content -Path infra\.gitignore -Encoding utf8
