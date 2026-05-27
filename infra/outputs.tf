@@ -31,3 +31,17 @@ output "rds_port" {
   value       = aws_db_instance.this.port
 }
 
+output "eks_cluster_name" {
+  description = "EKS cluster name (use with: aws eks update-kubeconfig)"
+  value       = module.eks.cluster_name
+}
+
+output "eks_cluster_endpoint" {
+  description = "EKS API server endpoint"
+  value       = module.eks.cluster_endpoint
+}
+
+output "eks_cluster_region" {
+  description = "Region where the cluster lives"
+  value       = var.aws_region
+}
