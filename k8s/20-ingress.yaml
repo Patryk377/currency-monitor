@@ -19,7 +19,6 @@ spec:
   rules:
     - http:
         paths:
-          # /api/* idzie do bramy
           - path: /api
             pathType: Prefix
             backend:
@@ -27,7 +26,6 @@ spec:
                 name: api-gateway
                 port:
                   number: 8080
-          # wszystko inne idzie do frontendu (Angular SPA)
           - path: /
             pathType: Prefix
             backend:
