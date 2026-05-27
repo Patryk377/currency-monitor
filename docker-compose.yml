@@ -1,0 +1,55 @@
+services:
+  currency-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: currency
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d currency"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rates-service:
+    build: ./backend/RatesService
+    environment:
+      ConnectionStrings__Postgres: "Host=currency-db;Port=5432;Database=currency;Username=postgres;Password=postgres"
+    depends_on:
+      currency-db:
+        condition: service_healthy
+
+  alerts-service:
+    build: ./backend/AlertsService
+    environment:
+      ConnectionStrings__Postgres: "Host=currency-db;Port=5432;Database=currency;Username=postgres;Password=postgres"
+      RatesService__BaseUrl: "http://rates-service:8080/"
+    depends_on:
+      currency-db:
+        condition: service_healthy
+      rates-service:
+        condition: service_started
+
+  api-gateway:
+    build: ./backend/ApiGateway
+    environment:
+      ReverseProxy__Clusters__rates-cluster__Destinations__rates__Address: "http://rates-service:8080/"
+      ReverseProxy__Clusters__alerts-cluster__Destinations__alerts__Address: "http://alerts-service:8080/"
+    ports:
+      - "5000:8080"
+    depends_on:
+      - rates-service
+      - alerts-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api-gateway
+
+volumes:
+  db-data:
