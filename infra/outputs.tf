@@ -45,3 +45,8 @@ output "eks_cluster_region" {
   description = "Region where the cluster lives"
   value       = var.aws_region
 }
+
+output "github_actions_role_arn" {
+  description = "ARN of the IAM role that GitHub Actions will assume (set as AWS_ROLE_ARN secret in GitHub)"
+  value       = aws_iam_role.github_actions.arn
+}

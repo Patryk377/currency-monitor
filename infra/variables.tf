@@ -33,3 +33,9 @@ variable "db_password" {
   type        = string
   sensitive   = true
 }
+
+variable "github_repository" {
+  description = "GitHub repository in owner/repo format"
+  type        = string
+  default     = "Patryk377/currency-monitor"
+}
