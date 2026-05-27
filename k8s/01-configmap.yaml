@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: currency-monitor
+data:
+  RatesService__BaseUrl: "http://rates-service:8080/"
+
+  ReverseProxy__Clusters__rates-cluster__Destinations__rates__Address: "http://rates-service:8080/"
+  ReverseProxy__Clusters__alerts-cluster__Destinations__alerts__Address: "http://alerts-service:8080/"
