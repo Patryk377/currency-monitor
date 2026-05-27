@@ -1,1 +1,33 @@
-<p>alerts-panel works!</p>
+<div class="panel">
+  <div class="panel-head">
+    <h2>Moje alerty</h2>
+    <span class="tag mono" *ngIf="!loading">{{ alerts.length }} aktywnych</span>
+  </div>
+
+  <!-- formularz dodawania -->
+  <div class="form">
+    <input class="mono" [(ngModel)]="newCode" placeholder="EUR" maxlength="3" />
+    <select [(ngModel)]="newDirection">
+      <option value="Above">powyżej</option>
+      <option value="Below">poniżej</option>
+    </select>
+    <input class="mono" type="number" step="0.0001" [(ngModel)]="newThreshold" placeholder="4.4000" />
+    <button (click)="addAlert()">Dodaj</button>
+  </div>
+
+  <div *ngIf="loading" class="state mono">Ładowanie…</div>
+  <div *ngIf="!loading && alerts.length === 0" class="state mono">Brak alertów. Dodaj pierwszy powyżej.</div>
+
+  <!-- lista alertów -->
+  <div class="alert-row" *ngFor="let a of alerts">
+    <div class="alert-body">
+      <div class="t">{{ a.code }} {{ a.direction === 'Above' ? 'powyżej' : 'poniżej' }} <span class="mono">{{ a.threshold.toFixed(4) }}</span></div>
+      <div class="s mono" *ngIf="a.lastCheckedRate !== null">ostatni kurs: {{ a.lastCheckedRate.toFixed(4) }}</div>
+      <div class="s mono" *ngIf="a.lastCheckedRate === null">jeszcze niesprawdzony</div>
+    </div>
+    <span class="alert-state" [class.fired]="a.isTriggered" [class.armed]="!a.isTriggered">
+      {{ a.isTriggered ? 'Wyzwolony' : 'Czeka' }}
+    </span>
+    <button class="del" (click)="removeAlert(a.id)">×</button>
+  </div>
+</div>
