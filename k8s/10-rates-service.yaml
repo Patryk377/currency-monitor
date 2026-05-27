@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rates-service
+  namespace: currency-monitor
+  labels:
+    app: rates-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rates-service
+  template:
+    metadata:
+      labels:
+        app: rates-service
+    spec:
+      containers:
+        - name: rates-service
+          image: RATES_SERVICE_IMAGE
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: ConnectionStrings__Postgres
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: ConnectionStrings__Postgres
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rates-service
+  namespace: currency-monitor
+spec:
+  type: ClusterIP
+  selector:
+    app: rates-service
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
