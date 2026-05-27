@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: currency-monitor-ingress
+  namespace: currency-monitor
+  annotations:
+    # uzywam AWS Load Balancer Controller 
+    kubernetes.io/ingress.class: alb
+    # ALB ma byc publiczny - bedzie mial publiczny DNS
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    # ALB routuje bezposrednio do podow (po IP), nie przez NodePort
+    alb.ingress.kubernetes.io/target-type: ip
+    # nasluchuj na porcie 80 (HTTP)
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    # health check ALB-a -> /health (dziala dla api-gateway; frontend zwroci 200 na /)
+    alb.ingress.kubernetes.io/healthcheck-path: /
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          # /api/* idzie do bramy
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  number: 8080
+          # wszystko inne idzie do frontendu (Angular SPA)
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
