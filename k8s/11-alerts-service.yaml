@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alerts-service
+  namespace: currency-monitor
+  labels:
+    app: alerts-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alerts-service
+  template:
+    metadata:
+      labels:
+        app: alerts-service
+    spec:
+      containers:
+        - name: alerts-service
+          image: ALERTS_SERVICE_IMAGE
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: ConnectionStrings__Postgres
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: ConnectionStrings__Postgres
+            - name: RatesService__BaseUrl
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: RatesService__BaseUrl
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alerts-service
+  namespace: currency-monitor
+spec:
+  type: ClusterIP
+  selector:
+    app: alerts-service
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
