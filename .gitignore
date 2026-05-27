@@ -1,0 +1,30 @@
+# .NET 
+bin/
+obj/
+*.user
+appsettings.Development.json
+appsettings.*.local.json
+
+# Angular
+node_modules/
+frontend/dist/
+frontend/.angular/
+npm-debug.log*
+
+# Terraform 
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+
+# env 
+.env
+.env.local
+*.pem
+
+# IDE / OS 
+.vs/
+.idea/
+.vscode/
+*.swp
+.DS_Store
