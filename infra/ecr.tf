@@ -18,8 +18,6 @@ resource "aws_ecr_repository" "this" {
   }
 }
 
-# polityka czyszcaca: zostaw 10 ostatnich obrazow, reszte usun
-# (zeby ECR nie rosl w nieskonczonosc przy kazdym pushu z CI)
 resource "aws_ecr_lifecycle_policy" "this" {
   for_each = aws_ecr_repository.this
 
