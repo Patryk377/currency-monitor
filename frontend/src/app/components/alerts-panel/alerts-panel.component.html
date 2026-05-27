@@ -26,7 +26,7 @@
       <div class="s mono" *ngIf="a.lastCheckedRate === null">jeszcze niesprawdzony</div>
     </div>
     <span class="alert-state" [class.fired]="a.isTriggered" [class.armed]="!a.isTriggered">
-      {{ a.isTriggered ? 'Wyzwolony' : 'Czeka' }}
+      {{ a.isTriggered ? 'Zmiana' : 'Czeka' }}
     </span>
     <button class="del" (click)="removeAlert(a.id)">×</button>
   </div>
