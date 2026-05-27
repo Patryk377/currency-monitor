@@ -8,7 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AlertsDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
 
-// Adres RatesService — lokalnie localhost, w klastrze do nadpisania na http://rates-service:8080/
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
+
+// Adres RatesService - lokalnie localhost, w klastrze do nadpisania na http://rates-service:8080/
 builder.Services.AddHttpClient<RatesClient>(c =>
     c.BaseAddress = new Uri(builder.Configuration["RatesService:BaseUrl"] ?? "http://localhost:5001/"));
 
