@@ -1,1 +1,23 @@
-<p>rates-table works!</p>
+<div class="panel">
+  <div class="panel-head">
+    <h2>Kursy walut</h2>
+    <span class="tag mono" *ngIf="!loading && !error">{{ rates.length }} walut</span>
+  </div>
+
+  <div *ngIf="loading" class="state mono">Ładowanie kursów…</div>
+  <div *ngIf="error" class="state error mono">Nie udało się pobrać kursów. Czy backend działa?</div>
+
+  <table *ngIf="!loading && !error">
+    <thead>
+      <tr><th>Waluta</th><th>Nazwa</th><th>Kurs średni</th><th>Data</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of rates">
+        <td><b>{{ r.code }}</b></td>
+        <td class="muted">{{ r.currency }}</td>
+        <td class="mono num">{{ r.mid.toFixed(4) }}</td>
+        <td class="mono muted">{{ r.effectiveDate }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

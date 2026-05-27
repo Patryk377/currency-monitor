@@ -1,1 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #0a0e1a;
+  --panel: #121829;
+  --panel-2: #161d30;
+  --border: #232c44;
+  --text: #e8edf7;
+  --muted: #8995b3;
+  --accent: #6c5ce7;
+  --accent-2: #00d2ff;
+  --up: #1fd896;
+  --down: #ff5e7a;
+  --warn: #ffb443;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(108,92,231,0.18), transparent 60%),
+    radial-gradient(700px 400px at 10% 110%, rgba(0,210,255,0.10), transparent 60%),
+    var(--bg);
+  min-height: 100vh;
+  line-height: 1.4;
+}
+
+.mono { font-family: 'JetBrains Mono', monospace; }
