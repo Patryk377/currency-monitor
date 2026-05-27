@@ -6,7 +6,7 @@ import { ExchangeRate, Alert, AlertInput } from '../models';
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   // Adres bramy YARP
-  private baseUrl = 'http://localhost:5000/api';
+  private baseUrl = '/api';
 
   constructor(private http: HttpClient) {}
 
